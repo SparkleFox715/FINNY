@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Website with SEC Data</title>
+    <title>Finny's Financial Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #1e1e1e;
@@ -17,10 +18,32 @@
             padding: 20px;
             color: white;
             text-align: center;
+            cursor: pointer;
+            border-bottom: 3px solid #005f99;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .header-content img {
+            width: 50px; /* Adjust size as needed */
+            height: auto;
+            border-radius: 50%;
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
         }
         nav {
             background-color: #252526;
             overflow: hidden;
+            border-top: 3px solid #1e1e1e;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         nav a {
             float: left;
@@ -29,6 +52,10 @@
             text-align: center;
             padding: 14px 20px;
             text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 5px;
+            margin: 5px;
+            font-weight: 600;
         }
         nav a:hover {
             background-color: #3e3e42;
@@ -36,6 +63,10 @@
         }
         .container {
             padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            background-color: #2e2e2e;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         footer {
             background-color: #252526;
@@ -45,12 +76,21 @@
             position: fixed;
             bottom: 0;
             width: 100%;
+            border-top: 3px solid #1e1e1e;
         }
         .hidden {
             display: none;
         }
         form {
             margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        label, input, button {
+            font-size: 1.2em;
+            margin: 5px 0;
+            font-weight: 600;
         }
         input[type="text"] {
             padding: 10px;
@@ -59,6 +99,11 @@
             border-radius: 4px;
             background-color: #1e1e1e;
             color: #d4d4d4;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #007acc;
+            box-shadow: 0 0 8px rgba(0, 122, 204, 0.8);
         }
         button {
             padding: 10px 20px;
@@ -67,9 +112,11 @@
             color: white;
             cursor: pointer;
             border-radius: 4px;
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
         button:hover {
             background-color: #005f99;
+            box-shadow: 0 4px 8px rgba(0, 95, 153, 0.2);
         }
         .loading {
             display: none;
@@ -77,8 +124,9 @@
         #sec-results {
             background: #252526;
             padding: 20px;
-            border-radius: 4px;
+            border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
         }
         pre {
             white-space: pre-wrap;
@@ -88,21 +136,24 @@
 </head>
 <body>
 
-<header>
-    <h1>FINNY'S Financial Analysis</h1>
+<header onclick="showSection('analysis')">
+    <div class="header-content">
+        <img src="superbadltrans.png" alt="Finny's Photo">
+        <h1>FINNY'S Financial Analysis</h1>
+    </div>
 </header>
 
 <nav>
-    <a href="#home" onclick="showSection('home')">Home</a>
+    <a href="#analysis" onclick="showSection('analysis')">Analysis</a>
     <a href="#about" onclick="showSection('about')">About</a>
     <a href="#contact" onclick="showSection('contact')">Contact</a>
     <a href="#sec-data" onclick="showSection('sec-data')">SEC Data</a>
 </nav>
 
 <div class="container">
-    <div id="home">
-        <h2>Home</h2>
-        <p>This is the home page of my enhanced website. Here you can find various information and navigate to different sections using the navigation bar above.</p>
+    <div id="analysis">
+        <h2>Analysis</h2>
+        <p>This is the analysis page of my enhanced website. Here you can find various information and navigate to different sections using the navigation bar above.</p>
     </div>
 
     <div id="about" class="hidden">
@@ -128,7 +179,7 @@
 </div>
 
 <footer>
-    <p>&copy; 2024 My Enhanced Website</p>
+    <p>&copy; 2024 Finny's Financial Analysis</p>
 </footer>
 
 <script>
@@ -177,6 +228,11 @@
             loadingDiv.style.display = 'none';
         }
     }
+
+    // Show the analysis section by default
+    document.addEventListener('DOMContentLoaded', () => {
+        showSection('analysis');
+    });
 </script>
 
 </body>
