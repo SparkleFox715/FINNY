@@ -29,7 +29,7 @@
             gap: 15px;
         }
         .header-content img {
-            width: 50px; /* Adjust size as needed */
+            width: 50px;
             height: auto;
             border-radius: 50%;
         }
@@ -37,13 +37,10 @@
             font-size: 2.5em;
             margin: 0;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            font-weight: 600;
         }
         nav {
             background-color: #252526;
             overflow: hidden;
-            border-top: 3px solid #1e1e1e;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         nav a {
             float: left;
@@ -52,10 +49,6 @@
             text-align: center;
             padding: 14px 20px;
             text-decoration: none;
-            transition: background-color 0.3s, color 0.3s;
-            border-radius: 5px;
-            margin: 5px;
-            font-weight: 600;
         }
         nav a:hover {
             background-color: #3e3e42;
@@ -63,10 +56,6 @@
         }
         .container {
             padding: 20px;
-            margin-top: 20px;
-            border-radius: 10px;
-            background-color: #2e2e2e;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         footer {
             background-color: #252526;
@@ -76,21 +65,12 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            border-top: 3px solid #1e1e1e;
         }
         .hidden {
             display: none;
         }
         form {
             margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        label, input, button {
-            font-size: 1.2em;
-            margin: 5px 0;
-            font-weight: 600;
         }
         input[type="text"] {
             padding: 10px;
@@ -99,11 +79,6 @@
             border-radius: 4px;
             background-color: #1e1e1e;
             color: #d4d4d4;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        input[type="text"]:focus {
-            border-color: #007acc;
-            box-shadow: 0 0 8px rgba(0, 122, 204, 0.8);
         }
         button {
             padding: 10px 20px;
@@ -112,49 +87,61 @@
             color: white;
             cursor: pointer;
             border-radius: 4px;
-            transition: background-color 0.3s, box-shadow 0.3s;
         }
         button:hover {
             background-color: #005f99;
-            box-shadow: 0 4px 8px rgba(0, 95, 153, 0.2);
         }
         .loading {
             display: none;
         }
-        #sec-results, #data-results {
+        #sec-results, #data-results, #ai-report-result {
             background: #252526;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 4px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin-top: 20px;
         }
         pre {
             white-space: pre-wrap;
             word-wrap: break-word;
         }
+        .white-page {
+            background: white;
+            color: black;
+            width: 8.5in;
+            height: 11in;
+            padding: 20px;
+            position: relative;
+        }
+        .white-page img {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
 
-<header onclick="showSection('analysis')">
+<header onclick="showSection('home')">
     <div class="header-content">
-        <img src="superbadltrans.png" alt="Finny's Photo">
-        <h1>FINNY'S Financial Analysis</h1>
+        <img src="superbadltrans.png" alt="Finny">
+        <h1>Finny's Financial Analysis</h1>
     </div>
 </header>
 
 <nav>
-    <a href="#analysis" onclick="showSection('analysis')">Analysis</a>
     <a href="#about" onclick="showSection('about')">About</a>
     <a href="#contact" onclick="showSection('contact')">Contact</a>
     <a href="#sec-data" onclick="showSection('sec-data')">SEC Data</a>
     <a href="#data" onclick="showSection('data')">Data</a>
+    <a href="#ai-report" onclick="showSection('ai-report')">AI Report</a>
 </nav>
 
 <div class="container">
-    <div id="analysis">
+    <div id="home">
         <h2>Analysis</h2>
-        <p>This is the analysis page of my enhanced website. Here you can find various information and navigate to different sections using the navigation bar above.</p>
+        <p>This is the home page of my enhanced website. Here you can find various information and navigate to different sections using the navigation bar above.</p>
     </div>
 
     <div id="about" class="hidden">
@@ -182,11 +169,21 @@
         <h2>Data</h2>
         <form onsubmit="fetchYahooData(event)">
             <label for="yahoo-ticker">Enter Stock Ticker:</label>
-            <input type="text" id="yahoo-ticker" name="ticker" required>
+            <input type="text" id="yahoo-ticker" name="yahoo-ticker" required>
             <button type="submit">Get Data</button>
         </form>
         <div class="loading" id="data-loading">Loading...</div>
         <div id="data-results"></div>
+    </div>
+
+    <div id="ai-report" class="hidden">
+        <h2>AI Report</h2>
+        <form onsubmit="showAIReport(event)">
+            <label for="ai-ticker">Enter Stock Ticker:</label>
+            <input type="text" id="ai-ticker" name="ai-ticker" required>
+            <button type="submit">Generate Report</button>
+        </form>
+        <div id="ai-report-result"></div>
     </div>
 </div>
 
@@ -194,6 +191,7 @@
     <p>&copy; 2024 My Enhanced Website</p>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
     function showSection(sectionId) {
         const sections = document.querySelectorAll('.container > div');
@@ -215,25 +213,22 @@
         loadingDiv.style.display = 'block';
 
         try {
+            // Fetching company details to get CIK
             const companyResponse = await fetch(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${ticker}&apikey=demo`);
             const companyData = await companyResponse.json();
             if (!companyData.bestMatches || companyData.bestMatches.length === 0) {
                 throw new Error('Ticker not found');
             }
-            const cik = companyData.bestMatches[0]['1. symbol'];
+            const bestMatch = companyData.bestMatches[0];
+            const name = bestMatch['2. name'];
+            const symbol = bestMatch['1. symbol'];
 
-            const response = await fetch(`https://data.sec.gov/submissions/CIK${cik}.json`, {
-                headers: {
-                    'User-Agent': 'YourAppName/1.0'
-                }
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            resultsDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            const statementResponse = await fetch(`https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${symbol}&type=10-K&count=1&output=atom`);
+            const statementData = await statementResponse.text();
+
+            resultsDiv.innerHTML = `<h3>${name} (${symbol})</h3><pre>${statementData}</pre>`;
         } catch (error) {
-            resultsDiv.innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+            resultsDiv.innerHTML = `<p>Error: ${error.message}</p>`;
         } finally {
             loadingDiv.style.display = 'none';
         }
@@ -248,21 +243,54 @@
         loadingDiv.style.display = 'block';
 
         try {
-            const response = await fetch(`/api/data/${ticker}`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            const response = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}`);
             const data = await response.json();
+            const quote = data.quoteResponse.result[0];
             resultsDiv.innerHTML = `
-                <p>PE Ratio: ${data.summaryDetail.trailingPE ? data.summaryDetail.trailingPE : 'N/A'}</p>
-                <p>All-Time High: ${data.price.regularMarketDayHigh ? data.price.regularMarketDayHigh : 'N/A'}</p>
-                <p>RSI Value: ${data.defaultKeyStatistics.rsi ? data.defaultKeyStatistics.rsi : 'N/A'}</p>
+                <h3>${quote.longName} (${quote.symbol})</h3>
+                <p>Current Price: ${quote.regularMarketPrice}</p>
+                <p>PE Ratio: ${quote.trailingPE}</p>
+                <p>52 Week High: ${quote.fiftyTwoWeekHigh}</p>
+                <p>52 Week Low: ${quote.fiftyTwoWeekLow}</p>
+                <p>RSI: ${quote.regularMarketChangePercent}</p>
             `;
         } catch (error) {
-            resultsDiv.innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+            resultsDiv.innerHTML = `<p>Error: ${error.message}</p>`;
         } finally {
             loadingDiv.style.display = 'none';
         }
+    }
+
+    async function showAIReport(event) {
+        event.preventDefault();
+        const ticker = document.getElementById('ai-ticker').value;
+        const resultDiv = document.getElementById('ai-report-result');
+        resultDiv.innerHTML = '';
+
+        // Create a white page
+        const whitePage = document.createElement('div');
+        whitePage.classList.add('white-page');
+        
+        // Add Finny's image to the top left
+        const finnyImg = document.createElement('img');
+        finnyImg.src = 'superbadltrans.png';
+        whitePage.appendChild(finnyImg);
+        
+        // Add the white page to the result div
+        resultDiv.appendChild(whitePage);
+
+        // Generate the PDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Convert the white page to a PDF
+        doc.html(whitePage, {
+            callback: function (doc) {
+                doc.save('ai-report.pdf');
+            },
+            x: 10,
+            y: 10
+        });
     }
 </script>
 
