@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="bubbly">SEC Data</h1>
+        <p>Enter a stock ticker to view SEC data:</p>
+        <input type="text" id="ticker" placeholder="Enter stock ticker">
+        <button onclick="fetchSecData()">Get SEC Data</button>
+        <div id="secDataDisplay" class="dataSection"></div>
+    </div>
+
+    <script>
+        async function fetchSecData() {
+            const ticker = document.getElementById('ticker').value;
+            const response = await fetch('/fetch-sec-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ticker: ticker })
+            });
+            const data = await response.json();
+            const secDataDisplay = document.getElementById('secDataDisplay');
+            secDataDisplay.innerHTML = '';
+
+            if (data.length > 0) {
+                data.forEach(filing => {
+                    const p = document.createElement('p');
+                    p.textContent = `Date: ${filing.date}, Form Type: ${filing.type}`;
+                    secDataDisplay.appendChild(p);
+                });
+            } else {
+                secDataDisplay.textContent = 'No SEC data found for this ticker.';
+            }
+        }
+    </script>
+</body>
+</html>
