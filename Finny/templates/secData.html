@@ -15,15 +15,6 @@
         <div id="secDataDisplay" class="dataSection"></div>
     </div>
 
-    <!-- Popup for Summary -->
-    <div id="summaryPopup" class="popup">
-        <div class="popup-content">
-            <span class="close-button" onclick="closePopup()">&times;</span>
-            <h2>SEC Data Summary</h2>
-            <div id="summaryContent"></div>
-        </div>
-    </div>
-
     <!-- Popup for Filing Interpretation -->
     <div id="filingPopup" class="popup">
         <div class="popup-content">
@@ -44,32 +35,30 @@
                 body: JSON.stringify({ ticker: ticker })
             });
             const secDataDisplay = document.getElementById('secDataDisplay');
-            secDataDisplay.innerHTML = '';
-
             if (response.ok) {
                 const data = await response.json();
-                if (data.filings.length > 0) {
+                secDataDisplay.innerHTML = '';
+                if (data.filings && data.filings.length > 0) {
                     data.filings.forEach(filing => {
                         const div = document.createElement('div');
                         div.classList.add('filing');
 
-                        const dateP = document.createElement('p');
-                        dateP.textContent = `Date: ${filing.date}`;
-                        div.appendChild(dateP);
+                        const date = document.createElement('p');
+                        date.textContent = `Date: ${filing.date}`;
+                        div.appendChild(date);
 
-                        const typeP = document.createElement('p');
-                        typeP.textContent = `Form Type: ${filing.type}`;
-                        div.appendChild(typeP);
+                        const type = document.createElement('p');
+                        type.textContent = `Type: ${filing.type}`;
+                        div.appendChild(type);
 
                         const linkA = document.createElement('a');
-                        linkA.href = '#';
+                        linkA.href = filing.link;
+                        linkA.target = '_blank';
                         linkA.textContent = 'View Filing';
-                        linkA.onclick = () => fetchFilingData(filing.link);
                         div.appendChild(linkA);
 
                         secDataDisplay.appendChild(div);
                     });
-                    showSummary(data.summary);
                 } else {
                     secDataDisplay.textContent = 'No SEC data found for this ticker.';
                 }
@@ -77,42 +66,6 @@
                 const error = await response.json();
                 secDataDisplay.textContent = `Error: ${error.error}`;
             }
-        }
-
-        async function fetchFilingData(filingUrl) {
-            const response = await fetch('/fetch-filing-data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ filing_url: filingUrl })
-            });
-            if (response.ok) {
-                const data = await response.json();
-                showFiling(data.summary);
-            } else {
-                const error = await response.json();
-                alert(`Error: ${error.error}`);
-            }
-        }
-
-        function showSummary(summary) {
-            const summaryContent = document.getElementById('summaryContent');
-            summaryContent.textContent = summary;
-            const popup = document.getElementById('summaryPopup');
-            popup.style.display = 'flex';
-        }
-
-        function showFiling(summary) {
-            const filingContent = document.getElementById('filingContent');
-            filingContent.textContent = summary;
-            const popup = document.getElementById('filingPopup');
-            popup.style.display = 'flex';
-        }
-
-        function closePopup() {
-            const popup = document.getElementById('summaryPopup');
-            popup.style.display = 'none';
         }
 
         function closeFilingPopup() {
