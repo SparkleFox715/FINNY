@@ -58,8 +58,7 @@ def fetch_sec_data():
         print(f"Error parsing data: {e}")
         return jsonify({'error': 'Error parsing SEC data. Please try again later.'}), 500
 
-    summary = generate_analytical_summary(filings)
-    return jsonify({'filings': filings, 'summary': summary})
+    return jsonify({'filings': filings})
 
 @app.route('/fetch-filing-data', methods=['POST'])
 def fetch_filing_data():
@@ -71,48 +70,13 @@ def fetch_filing_data():
         return jsonify({'error': 'Failed to fetch filing data. Please try again later.'}), 500
 
     soup = BeautifulSoup(content, 'html.parser')
-    filing_summary = interpret_filing(soup)
-    return jsonify({'summary': filing_summary})
-
-def generate_analytical_summary(filings):
-    if not filings:
-        return "No filings available to summarize."
-    
-    summary = ""
-    insider_trading = any(filing['type'] == '4' for filing in filings)
-    earnings_reports = [filing for filing in filings if '10-Q' in filing['type'] or '10-K' in filing['type']]
-    significant_filings = [filing for filing in filings if '8-K' in filing['type']]
-
-    if insider_trading:
-        summary += "Recent insider trading activity detected.\n"
-    if earnings_reports:
-        summary += f"Latest earnings reports:\n"
-        for report in earnings_reports[:3]:  # Limit to the most recent 3
-            summary += f" - {report['type']} filed on {report['date']} (Link: {report['link']})\n"
-    if significant_filings:
-        summary += f"Significant filings (e.g., 8-K) include:\n"
-        for filing in significant_filings[:3]:  # Limit to the most recent 3
-            summary += f" - {filing['type']} filed on {filing['date']} (Link: {filing['link']})\n"
-    
-    summary += f"\nTotal filings: {len(filings)}.\n"
-    form_types = {}
-    for filing in filings:
-        form_types[filing['type']] = form_types.get(filing['type'], 0) + 1
-    summary += "Filing types distribution:\n"
-    for form_type, count in form_types.items():
-        summary += f" - {form_type}: {count}\n"
-    
-    return summary
-
-def interpret_filing(soup):
-    # Extract some example information for interpretation
     document = soup.find('document')
     if document:
-        text = document.get_text()
-        if len(text) > 500:
-            return text[:500] + '...'
-        return text
-    return "No detailed information available for this filing."
+        filing_text = document.get_text()
+    else:
+        filing_text = "No detailed information available for this filing."
+
+    return jsonify({'summary': filing_text})
 
 if __name__ == '__main__':
     app.run(debug=True)
