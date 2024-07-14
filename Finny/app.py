@@ -88,6 +88,14 @@ def fetch_yahoo_data(symbol):
     #getting general information
     generalInfo = yahFin.Ticker(symbol)
     info={}
+    info['TrailingPE'] = generalInfo.info['trailingPE']
+    info['ForwardPE'] = generalInfo.info['forwardPE']
+    eps = (float)(generalInfo.info['netIncomeToCommon'])/(float)(generalInfo.info['impliedSharesOutstanding'])
+    pe = (float)(generalInfo.info['currentPrice'])/eps
+    info['CurrentPE'] = pe
+    info['CurrentEPS'] = eps
+    info['TrailingEPS'] = generalInfo.info['trailingEps']
+    info['ForwardEPS'] = generalInfo.info['forwardEps']
     info['AvgVolume'] = generalInfo.info['averageVolume']
     info['Volume'] = generalInfo.info['volume']
     info['Bid'] = generalInfo.info['bid']
@@ -109,7 +117,7 @@ def fetch_yahoo_data(symbol):
     info['52WeekChange'] = generalInfo.info['52WeekChange']
     info['DayLow'] = generalInfo.info['dayLow']
     info['DayHigh'] = generalInfo.info['dayHigh']
-    print(info)
+    return info
     
     #getting actual prices if needed and using pandas dataframe
     # todaydata = generalInfo.history('1y')
@@ -119,5 +127,4 @@ def fetch_yahoo_data(symbol):
 
 
 if __name__ == '__main__':
-    # app.run(debug=True)
-    fetch_yahoo_data('META')
+    app.run(debug=True)
