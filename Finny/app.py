@@ -95,6 +95,20 @@ def fetch_yahoo_data(symbol):
     info['Open'] = generalInfo.info['open']
     info['EBITDA'] = generalInfo.info['ebitda']
     info['float'] = generalInfo.info['floatShares']
+    info['SharesShort'] = generalInfo.info['sharesShort']
+    info['ShortRatio'] = generalInfo.info['shortRatio']
+    info['ShortPercOfFloat'] = generalInfo.info['shortPercentOfFloat']
+    info['Revenue'] = generalInfo.info['totalRevenue']
+    info['NetIncome'] = generalInfo.info['netIncomeToCommon']
+    info['ProfitMargin'] = generalInfo.info['profitMargins']
+    info['LastFiscalYearEnd'] = generalInfo.info['lastFiscalYearEnd']
+    info['NextFiscalYearEnd'] = generalInfo.info['nextFiscalYearEnd']
+    info['MarketCap'] = generalInfo.info['marketCap']
+    info['52WeekLow'] = generalInfo.info['fiftyTwoWeekLow']
+    info['52WeekHigh'] = generalInfo.info['fiftyTwoWeekHigh']
+    info['52WeekChange'] = generalInfo.info['52WeekChange']
+    info['DayLow'] = generalInfo.info['dayLow']
+    info['DayHigh'] = generalInfo.info['dayHigh']
     print(info)
     
     #getting actual prices if needed and using pandas dataframe
