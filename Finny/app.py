@@ -3,6 +3,10 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import quote
 import time
+import yfinance as yahFin
+import pandas
+import matplotlib.pyplot as plt
+
 
 app = Flask(__name__)
 
@@ -78,5 +82,28 @@ def fetch_filing_data():
 
     return jsonify({'summary': filing_text})
 
+
+
+def fetch_yahoo_data(symbol):
+    #getting general information
+    generalInfo = yahFin.Ticker(symbol)
+    info={}
+    info['AvgVolume'] = generalInfo.info['averageVolume']
+    info['Volume'] = generalInfo.info['volume']
+    info['Bid'] = generalInfo.info['bid']
+    info['Ask'] = generalInfo.info['ask']
+    info['Open'] = generalInfo.info['open']
+    info['EBITDA'] = generalInfo.info['ebitda']
+    info['float'] = generalInfo.info['floatShares']
+    print(info)
+    
+    #getting actual prices if needed and using pandas dataframe
+    # todaydata = generalInfo.history('1y')
+    # print(todaydata['Close'])
+    # todaydata['Close'].plot(title=(symbol+"'s stock"))
+    # plt.show()
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    fetch_yahoo_data('META')
