@@ -4,9 +4,6 @@ from bs4 import BeautifulSoup
 from urllib.parse import quote
 import time
 import yfinance as yahFin
-import pandas
-import matplotlib.pyplot as plt
-
 
 app = Flask(__name__)
 
@@ -82,49 +79,49 @@ def fetch_filing_data():
 
     return jsonify({'summary': filing_text})
 
+@app.route('/finance-data')
+def finance_data():
+    return render_template('financeData.html')
 
+@app.route('/fetch-finance-data', methods=['POST'])
+def fetch_finance_data():
+    ticker = request.json['ticker'].upper()
+    data = fetch_yahoo_data(ticker)
+    if data:
+        return jsonify(data)
+    else:
+        return jsonify({'error': 'Failed to fetch financial data. Please try again later.'}), 500
 
 def fetch_yahoo_data(symbol):
-    #getting general information
     generalInfo = yahFin.Ticker(symbol)
-    info={}
-    info['TrailingPE'] = generalInfo.info['trailingPE']
-    info['ForwardPE'] = generalInfo.info['forwardPE']
-    eps = (float)(generalInfo.info['netIncomeToCommon'])/(float)(generalInfo.info['impliedSharesOutstanding'])
-    pe = (float)(generalInfo.info['currentPrice'])/eps
-    info['CurrentPE'] = pe
-    info['CurrentEPS'] = eps
-    info['TrailingEPS'] = generalInfo.info['trailingEps']
-    info['ForwardEPS'] = generalInfo.info['forwardEps']
-    info['AvgVolume'] = generalInfo.info['averageVolume']
-    info['Volume'] = generalInfo.info['volume']
-    info['Bid'] = generalInfo.info['bid']
-    info['Ask'] = generalInfo.info['ask']
-    info['Open'] = generalInfo.info['open']
-    info['EBITDA'] = generalInfo.info['ebitda']
-    info['float'] = generalInfo.info['floatShares']
-    info['SharesShort'] = generalInfo.info['sharesShort']
-    info['ShortRatio'] = generalInfo.info['shortRatio']
-    info['ShortPercOfFloat'] = generalInfo.info['shortPercentOfFloat']
-    info['Revenue'] = generalInfo.info['totalRevenue']
-    info['NetIncome'] = generalInfo.info['netIncomeToCommon']
-    info['ProfitMargin'] = generalInfo.info['profitMargins']
-    info['LastFiscalYearEnd'] = generalInfo.info['lastFiscalYearEnd']
-    info['NextFiscalYearEnd'] = generalInfo.info['nextFiscalYearEnd']
-    info['MarketCap'] = generalInfo.info['marketCap']
-    info['52WeekLow'] = generalInfo.info['fiftyTwoWeekLow']
-    info['52WeekHigh'] = generalInfo.info['fiftyTwoWeekHigh']
-    info['52WeekChange'] = generalInfo.info['52WeekChange']
-    info['DayLow'] = generalInfo.info['dayLow']
-    info['DayHigh'] = generalInfo.info['dayHigh']
+    info = {
+        'TrailingPE': generalInfo.info.get('trailingPE', 'N/A'),
+        'ForwardPE': generalInfo.info.get('forwardPE', 'N/A'),
+        'TrailingEPS': generalInfo.info.get('trailingEps', 'N/A'),
+        'ForwardEPS': generalInfo.info.get('forwardEps', 'N/A'),
+        'AvgVolume': generalInfo.info.get('averageVolume', 'N/A'),
+        'Volume': generalInfo.info.get('volume', 'N/A'),
+        'Bid': generalInfo.info.get('bid', 'N/A'),
+        'Ask': generalInfo.info.get('ask', 'N/A'),
+        'Open': generalInfo.info.get('open', 'N/A'),
+        'EBITDA': generalInfo.info.get('ebitda', 'N/A'),
+        'Float': generalInfo.info.get('floatShares', 'N/A'),
+        'SharesShort': generalInfo.info.get('sharesShort', 'N/A'),
+        'ShortRatio': generalInfo.info.get('shortRatio', 'N/A'),
+        'ShortPercOfFloat': generalInfo.info.get('shortPercentOfFloat', 'N/A'),
+        'Revenue': generalInfo.info.get('totalRevenue', 'N/A'),
+        'NetIncome': generalInfo.info.get('netIncomeToCommon', 'N/A'),
+        'ProfitMargin': generalInfo.info.get('profitMargins', 'N/A'),
+        'LastFiscalYearEnd': generalInfo.info.get('lastFiscalYearEnd', 'N/A'),
+        'NextFiscalYearEnd': generalInfo.info.get('nextFiscalYearEnd', 'N/A'),
+        'MarketCap': generalInfo.info.get('marketCap', 'N/A'),
+        '52WeekLow': generalInfo.info.get('fiftyTwoWeekLow', 'N/A'),
+        '52WeekHigh': generalInfo.info.get('fiftyTwoWeekHigh', 'N/A'),
+        '52WeekChange': generalInfo.info.get('52WeekChange', 'N/A'),
+        'DayLow': generalInfo.info.get('dayLow', 'N/A'),
+        'DayHigh': generalInfo.info.get('dayHigh', 'N/A')
+    }
     return info
-    
-    #getting actual prices if needed and using pandas dataframe
-    # todaydata = generalInfo.history('1y')
-    # print(todaydata['Close'])
-    # todaydata['Close'].plot(title=(symbol+"'s stock"))
-    # plt.show()
-
 
 if __name__ == '__main__':
     app.run(debug=True)
