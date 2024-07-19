@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="bubbly">Financial Data</h1>
+        <p>Enter a stock ticker to view financial data:</p>
+        <input type="text" id="ticker" placeholder="Enter stock ticker">
+        <button onclick="fetchFinanceData()">Get Finance Data</button>
+        <div id="financeDataDisplay" class="dataSection"></div>
+    </div>
+
+    <script>
+        async function fetchFinanceData() {
+            const ticker = document.getElementById('ticker').value;
+            const response = await fetch('/fetch-finance-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ticker: ticker })
+            });
+            const financeDataDisplay = document.getElementById('financeDataDisplay');
+            if (response.ok) {
+                const data = await response.json();
+                financeDataDisplay.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } else {
+                const error = await response.json();
+                financeDataDisplay.textContent = `Error: ${error.error}`;
+            }
+        }
+    </script>
+</body>
+</html>
