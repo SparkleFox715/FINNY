@@ -34,7 +34,9 @@ def fetch_sec_data():
     ticker = request.json['ticker'].upper()
     encoded_ticker = quote(ticker)
     url = f'https://www.sec.gov/cgi-bin/browse-edgar?CIK={encoded_ticker}&action=getcompany&owner=exclude&count=10'
-    headers = {'User-Agent': 'Mozilla/5.0'}
+    headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+}
 
     content = fetch_sec_data_from_url(url, headers)
     if content is None:
