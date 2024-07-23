@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import quote
 import time
 import yfinance as yahFin
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -93,7 +94,17 @@ def fetch_finance_data():
         return jsonify(data)
     else:
         return jsonify({'error': 'Failed to fetch financial data. Please try again later.'}), 500
-
+    
+    
+def TimeFormat(timestamps):
+    temp = list(timestamps.keys())
+    newKeys =[]
+    newDict = {}
+    for i in range(len(temp)):
+        newKeys.append(temp[i].strftime('%Y-%m-%d %X'))
+        newDict[newKeys[i]] = timestamps[temp[i]]
+    return newDict
+    
 def fetch_yahoo_data(symbol):
     generalInfo = yahFin.Ticker(symbol)
     info = {
@@ -123,7 +134,53 @@ def fetch_yahoo_data(symbol):
         'DayLow': generalInfo.info.get('dayLow', 'N/A'),
         'DayHigh': generalInfo.info.get('dayHigh', 'N/A')
     }
-    return info
+    #going to  include stock information for 1 week, 1 month, 3 months, 6 months, and 1 year
+    W1_data  =  yahFin.download(symbol,  period='5d')
+    M1_data = yahFin.download(symbol, period='1mo')
+    M3_data = yahFin.download(symbol, period='3mo')
+    M6_data = yahFin.download(symbol, period='6mo')
+    Y1_data = yahFin.download(symbol, period='1y')
+    #W1 data
+    global W1_open
+    W1_open = W1_data['Open'].to_dict()
+    W1_open =TimeFormat(W1_open)
+    
+    W1_high = W1_data['High'].to_dict()
+    W1_low = W1_data['Low'].to_dict()
+    W1_closing = W1_data['Close'].to_dict()
+    
+    #M1 data
+    M1_open = M1_data['Open'].to_dict()
+    M1_high = M1_data['High'].to_dict()
+    M1_low = M1_data['Low'].to_dict()
+    M1_closing = M1_data['Close'].to_dict()
+    #M3 data
+    M3_open = M3_data['Open'].to_dict()
+    M3_high = M3_data['High'].to_dict()
+    M3_low = M3_data['Low'].to_dict()
+    M3_closing = M3_data['Close'].to_dict()
+    
+    #M6 data
+    M6_open = M6_data['Open'].to_dict()
+    M6_high = M6_data['High'].to_dict()
+    M6_low = M6_data['Low'].to_dict()
+    M6_closing = M6_data['Close'].to_dict()
+    
+    #Y1 data
+    Y1_open = Y1_data['Open'].to_dict()
+    Y1_high = Y1_data['High'].to_dict()
+    Y1_low = Y1_data['Low'].to_dict()
+    Y1_closing = Y1_data['Close'].to_dict()   
+    
+    # print(W1_open)
+    
+    # print(D1_data)
+    # print(Y1_open)
+    return info, W1_open, W1_low, W1_high, W1_closing, M1_open, M1_low, M1_high, M1_closing, M3_open, M3_low, M3_high, M3_closing, M6_open, M6_low, M6_high, M6_closing, Y1_open, Y1_low, Y1_high, Y1_closing
+
+
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    fetch_yahoo_data('TSLA')

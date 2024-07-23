@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<script type="text/javascript" src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
         <input type="text" id="ticker" placeholder="Enter stock ticker">
         <button onclick="fetchFinanceData()">Get Finance Data</button>
         <div id="financeDataDisplay" class="dataSection"></div>
+        <div id="chartContainer" style="height: 300px; width: 100%;">
     </div>
 
     <script>
@@ -28,11 +30,77 @@
             const financeDataDisplay = document.getElementById('financeDataDisplay');
             if (response.ok) {
                 const data = await response.json();
-                financeDataDisplay.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                createChart(ticker, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19], data[20])
+                //financeDataDisplay.innerHTML = '<pre>' + JSON.stringify(data[1], null, 2) + '</pre>';
             } else {
                 const error = await response.json();
                 financeDataDisplay.textContent = `Error: ${error.error}`;
             }
+        }
+        function createChart(symbol, W1_open, W1_low, W1_high, W1_closing, M1_open, M1_low, M1_high, M1_closing, M3_open, M3_low, M3_high, M3_closing, M6_open, M6_low, M6_high, M6_closing, Y1_open, Y1_low, Y1_high, Y1_closing){
+            //W1 chart
+            keys = Object.keys(W1_open);
+            datPon = [];
+            for(let i =0;i<W1_open.length;i++){
+                datPon[i] = {x: keys[i], y:[W1_open[keys[i]], W1_high[keys[i]],W1_low[keys[i]],W1_closing[keys[i]]]}
+            }
+            var chart = new CanvasJS.Chart("chartContainer",
+            {
+                title:{
+                    text: symbol+" 1 Week Chart",
+                    fontFamily: "times new roman"
+                },
+                zoomEnabled: true,
+                exportEnabled: true,
+                axisY: {
+                    includeZero:false,
+                    title: "Prices",
+                    prefix: "$ "
+                },
+                axisX: {
+                    interval:2,
+                    intervalType: "month",
+                    valueFormatString: "MMM-YY",
+                    labelAngle: -45
+                },
+                data: [
+                {
+                    type: "candlestick",
+                    risingColor: "green",
+                    color: "red",
+                    dataPoints: [
+                        {x: new Date(2012,01,01),y:[5198, 5629, 5159, 5385]},
+                        {x: new Date(2012,02,01),y:[5366, 5499, 5135, 5295]},
+                        {x: new Date(2012,03,01),y:[5296, 5378, 5154, 5248]},
+                        {x: new Date(2012,04,01),y:[5254, 5279, 4788, 4924]},
+                        {x: new Date(2012,05,01),y:[4910, 5286, 4770, 5278]},
+                        {x: new Date(2012,06,01),y:[5283, 5348, 5032, 5229]},
+                        {x: new Date(2012,07,01),y:[5220, 5448, 5164, 5258]},
+                        {x: new Date(2012,08,01),y:[5276, 5735, 5215, 5703]},
+                        {x: new Date(2012,09,01),y:[5704, 5815, 4888, 5619]},
+                        {x: new Date(2012,10,01),y:[5609, 5885, 5548, 5879]},
+                        {x: new Date(2012,11,01),y:[5878, 5965, 5823, 5905]},
+                        {x: new Date(2013,00,01),y:[5937, 6111, 5935, 6034]},
+                        {x: new Date(2013,01,01),y:[6040, 6052, 5671, 5693]},
+                        {x: new Date(2013,02,01),y:[5702, 5971, 5604, 5682]},
+                        {x: new Date(2013,03,01),y:[5697, 5962, 5477, 5930]},
+                        {x: new Date(2013,04,01),y:[5911, 6229, 5910, 5985]},
+                        {x: new Date(2013,05,01),y:[5997, 6011, 5566, 5842]},
+                        {x: new Date(2013,06,01),y:[5834, 6093, 5675, 5742]},
+                        {x: new Date(2013,07,01),y:[5776, 5808, 5118, 5471]},
+                        {x: new Date(2013,08,01),y:[5480, 6142, 5318, 5735]},
+                        {x: new Date(2013,09,01),y:[5756, 6309, 5700, 6299]},
+                        {x: new Date(2013,10,01),y:[6289, 6342, 5972, 6176]},
+                        {x: new Date(2013,11,01),y:[6171, 6415, 6129, 6304]}
+                    ]
+                }
+                ]
+            });
+            chart.render();
+            //M1 chart
+            //M3 chart
+            //M6 chart
+            //Y1 chart
         }
     </script>
 </body>
