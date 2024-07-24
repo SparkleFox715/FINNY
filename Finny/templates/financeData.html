@@ -53,8 +53,8 @@
                 W1datPonL.push(temp);
             }
             
-            generateChart(symbol+" for 1 Week", W1datPonC, "day", "1", "DD-MMM-YY", true);
-            //generateChart(symbol+" for 1 Week", W1datPonL, "day", "1", "DD-MMM-YY", false);
+           // generateChart(symbol+" for 1 Week", W1datPonC, "day", "1", "DD-MMM-YY", true);
+            generateChart(symbol+" for 1 Week", W1datPonL, "day", "1", "DD-MMM-YY", false);
             //M1 chart
             //M3 chart
             //M6 chart
@@ -68,23 +68,28 @@
             if(charting){
                 var chart = new CanvasJS.Chart("chartContainer",
                 {
+                    
                     backgroundColor: "#000000",
                     title:{
                         fontColor: "white",
                         text: title,
                         fontFamily: font
                     },
-                    zoomEnabled: true,
+                    zoomEnabled: true, 
                     exportEnabled: false,
                     axisY: {
                         includeZero:false,
                         title: "Prices",
                         prefix: "$ ",
                         tickColor: "white",
-                        gridColor:"white",
+                        gridColor:"#4F4F4F",
                         lineColor:"white",
                         titleFontColor: "white",
                         labelFontColor: "white",
+                        crosshair: { 
+                            enabled: true,
+                            color:"#4F4F4F"
+                        } 
                     },
                     axisX: {
                         labelFontColor: "white",
@@ -94,13 +99,17 @@
                         labelAngle: -45,
                         tickColor:"white",
                         lineColor:"white",
-                        gridColor:"white",
+                        crosshair: { 
+                            enabled: true,
+                            color:"#4F4F4F"
+                        } 
                     },
                     data: [
                     {
                         type: "candlestick",
-                        color: "red",
+                        color: "white",
                         risingColor: "green",
+                        fallingColor:"red",
                         dataPoints: datPon
                     }
                     ]
@@ -123,17 +132,24 @@
                         title: "Prices",
                         prefix: "$ ",
                         tickColor: "white",
-                        gridColor:"white",
+                        gridColor:"#4F4F4F",
                         lineColor:"white",
                         titleFontColor: "white",
-                        labelFontColor: "white"
+                        labelFontColor: "white",
+                        crosshair: { 
+                            enabled: true,
+                            color:"#4F4F4F"
+                        } 
                     },
                     axisX: {
                         labelFontColor: "white",
                         labelAngle: -45,
                         tickColor:"white",
                         lineColor:"white",
-                        gridColor:"white",
+                        crosshair: { 
+                            enabled: true,
+                            color:"#4F4F4F"
+                        } 
                     },
                     data: [
                     {
