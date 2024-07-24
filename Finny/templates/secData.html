@@ -2,75 +2,139 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEC Data</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .page-number, .page-nav {
+            background-color: #007acc;
+            color: #ffffff;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .page-number.active {
+            background-color: #005f99;
+        }
+
+        .page-number:hover, .page-nav:hover {
+            background-color: #005f99;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1 class="bubbly">SEC Data</h1>
-        <p>Enter a stock ticker to view SEC data:</p>
-        <input type="text" id="ticker" placeholder="Enter stock ticker">
-        <button onclick="fetchSecData()">Get SEC Data</button>
-        <div id="secDataDisplay" class="dataSection"></div>
-    </div>
-
-    <!-- Popup for Filing Interpretation -->
-    <div id="filingPopup" class="popup">
-        <div class="popup-content">
-            <span class="close-button" onclick="closeFilingPopup()">&times;</span>
-            <h2>Filing Interpretation</h2>
-            <div id="filingContent"></div>
+        <div class="dataSection">
+            <input type="text" id="ticker" placeholder="Enter Ticker Symbol">
+            <button onclick="fetchSecData()">Fetch SEC Data</button>
+            <button onclick="location.href='/'">Home</button> <!-- Home button -->
         </div>
+        <div id="filingsContainer"></div>
+        <div class="pagination" id="pagination"></div>
     </div>
 
     <script>
-        async function fetchSecData() {
+        let currentPage = 1;
+        const itemsPerPage = 5;
+        const maxVisiblePages = 5;
+        let totalPages = 0;
+        let totalItems = 0;
+
+        function fetchSecData() {
             const ticker = document.getElementById('ticker').value;
-            const response = await fetch('/fetch-sec-data', {
+            console.log(`Fetching SEC data for ticker: ${ticker}`);
+            fetch('/fetch-sec-data', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ ticker: ticker })
-            });
-            const secDataDisplay = document.getElementById('secDataDisplay');
-            if (response.ok) {
-                const data = await response.json();
-                secDataDisplay.innerHTML = '';
-                if (data.filings && data.filings.length > 0) {
-                    data.filings.forEach(filing => {
-                        const div = document.createElement('div');
-                        div.classList.add('filing');
-
-                        const date = document.createElement('p');
-                        date.textContent = `Date: ${filing.date}`;
-                        div.appendChild(date);
-
-                        const type = document.createElement('p');
-                        type.textContent = `Type: ${filing.type}`;
-                        div.appendChild(type);
-
-                        const linkA = document.createElement('a');
-                        linkA.href = filing.link;
-                        linkA.target = '_blank';
-                        linkA.textContent = 'View Filing';
-                        div.appendChild(linkA);
-
-                        secDataDisplay.appendChild(div);
-                    });
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
                 } else {
-                    secDataDisplay.textContent = 'No SEC data found for this ticker.';
+                    console.log('Fetched data:', data);
+                    totalItems = data.filings.length;
+                    renderFilings(data.filings);
+                    setupPagination(totalItems);
                 }
-            } else {
-                const error = await response.json();
-                secDataDisplay.textContent = `Error: ${error.error}`;
+            })
+            .catch(error => console.error('Error fetching SEC data:', error));
+        }
+
+        function renderFilings(filings) {
+            const filingsContainer = document.getElementById('filingsContainer');
+            filingsContainer.innerHTML = '';
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = Math.min(start + itemsPerPage, filings.length);
+            for (let i = start; i < end; i++) {
+                const filingElement = document.createElement('div');
+                filingElement.className = 'filing';
+                filingElement.innerHTML = `
+                    <p>Date: ${filings[i].date}</p>
+                    <p>Type: ${filings[i].type}</p>
+                    <p><a href="${filings[i].link}" target="_blank">View Filing</a></p>
+                `;
+                filingsContainer.appendChild(filingElement);
             }
         }
 
-        function closeFilingPopup() {
-            const popup = document.getElementById('filingPopup');
-            popup.style.display = 'none';
+        function setupPagination(totalItems) {
+            totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            const startPage = Math.max(currentPage - Math.floor(maxVisiblePages / 2), 1);
+            const endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
+
+            if (currentPage > 1) {
+                const prevButton = document.createElement('button');
+                prevButton.className = 'page-nav';
+                prevButton.innerText = 'Previous';
+                prevButton.addEventListener('click', () => {
+                    currentPage--;
+                    renderFilingsRange();
+                });
+                pagination.appendChild(prevButton);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.className = 'page-number';
+                if (i === currentPage) pageButton.classList.add('active');
+                pageButton.innerText = i;
+                pageButton.addEventListener('click', () => {
+                    currentPage = i;
+                    renderFilingsRange();
+                });
+                pagination.appendChild(pageButton);
+            }
+
+            if (currentPage < totalPages) {
+                const nextButton = document.createElement('button');
+                nextButton.className = 'page-nav';
+                nextButton.innerText = 'Next';
+                nextButton.addEventListener('click', () => {
+                    currentPage++;
+                    renderFilingsRange();
+                });
+                pagination.appendChild(nextButton);
+            }
+        }
+
+        function renderFilingsRange() {
+            fetchSecData();
         }
     </script>
 </body>
