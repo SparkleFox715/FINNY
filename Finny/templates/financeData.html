@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<script type="text/javascript" src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,16 +9,140 @@
 </head>
 <body class="finance-data">
     <div class="container">
-        <h1 class="bubbly">Financial Data</h1>
-        <p>Enter a stock ticker to view financial data:</p>
-        <input type="text" id="ticker" placeholder="Enter stock ticker">
-        <button onclick="fetchFinanceData()">Get Finance Data</button>
-        <button onclick="window.location.href='/'">Home</button>
-        <div id="financeDataDisplay" class="dataSection"></div>
-    </div>
+        <div id ="headings">
+            <h1 class="bubbly">Financial Data</h1>
+            <p>Enter a stock ticker to view financial data:</p>
+            <input type="text" id="ticker" placeholder="Enter stock ticker">
+            <button onclick="fetchFinanceData(1, 1)">Get Finance Data</button>
+            <button onclick="window.location.href='/'">Home</button>
+        </div>
+
+
+        <button hidden class = "butt" id="lineGraph" onclick="fetchFinanceData(1, -1)">Line</button>
+        <button hidden class = "butt" id="candleGraph" onclick="fetchFinanceData(2, -1)">Candle</button>
+        <button hidden class = "butt" id="Week1" onclick="fetchFinanceData(-1, 1)">1 Week</button>
+        <button hidden class = "butt" id="Month1" onclick="fetchFinanceData(-1, 2)">1 Month</button>
+        <button hidden class = "butt" id="Month3" onclick="fetchFinanceData(-1, 3)">3 Months</button>
+        <button hidden class = "butt" id="Month6" onclick="fetchFinanceData(-1, 4)">6 Months</button>
+        <button hidden class = "butt" id="Year1" onclick="fetchFinanceData(-1, 5)">1 Year</button>
+
+
+        <div id="chartContainer" style="height: 65%; width: 60%; position:absolute;"></div>
+
+        <table hidden id="datTable1">
+            <tr>
+                <td id = "T1row1V1">a</td>
+                <td id = "T1row1V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row2V1">a</td>
+                <td id = "T1row2V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row3V1">a</td>
+                <td id = "T1row3V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row4V1">a</td>
+                <td id = "T1row4V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row5V1">a</td>
+                <td id = "T1row5V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row6V1">a</td>
+                <td id = "T1row6V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row7V1">a</td>
+                <td id = "T1row7V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row8V1">a</td>
+                <td id = "T1row8V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row9V1">a</td>
+                <td id = "T1row9V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row10V1">a</td>
+                <td id = "T1row10V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row11V1">a</td>
+                <td id = "T1row11V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row12V1">a</td>
+                <td id = "T1row12V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row13V1">a</td>
+                <td id = "T1row13V2">b</td>
+            </tr>
+        </table>
+        
+        <table hidden id="datTable2">
+            <tr>
+                <td id = "T2row1V1">a</td>
+                <td id = "T2row1V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row2V1">a</td>
+                <td id = "T2row2V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row3V1">a</td>
+                <td id = "T2row3V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row4V1">a</td>
+                <td id = "T2row4V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row5V1">a</td>
+                <td id = "T2row5V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row6V1">a</td>
+                <td id = "T2row6V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row7V1">a</td>
+                <td id = "T2row7V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row8V1">a</td>
+                <td id = "T2row8V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row9V1">a</td>
+                <td id = "T2row9V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row10V1">a</td>
+                <td id = "T2row10V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row11V1">a</td>
+                <td id = "T2row11V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row12V1">a</td>
+                <td id = "T2row12V2">b</td>
+            </tr>
+        </table>
+    
 
     <script>
-        async function fetchFinanceData() {
+        var GChoice = 1;
+        var TChoice = 1;
+        async function fetchFinanceData(GraphChoice, TimeChoice) {
+            if(GraphChoice!=-1){GChoice = GraphChoice;}
+            if(TimeChoice!=-1){TChoice = TimeChoice;}
+
             const ticker = document.getElementById('ticker').value;
             const response = await fetch('/fetch-finance-data', {
                 method: 'POST',
@@ -28,12 +153,467 @@
             });
             const financeDataDisplay = document.getElementById('financeDataDisplay');
             if (response.ok) {
+                var heading = document.getElementById("headings");
+                heading.style.position ="absolute";
+                heading.style.top="0%";
+                heading.style.left="37%";
+
+                var graphs = document.getElementById("chartContainer");
+                graphs.style.position = "absolute";
+                graphs.style.top = "35%";
+                graphs.style.left="2%";
+
+                var b1 = document.getElementById("lineGraph");
+                var b2 = document.getElementById("candleGraph");
+                var b3 = document.getElementById("Week1");
+                var b4 = document.getElementById("Month1");
+                var b5 = document.getElementById("Month3");
+                var b6 = document.getElementById("Month6");
+                var b7 = document.getElementById("Year1");
+                b1.removeAttribute("hidden")
+                b2.removeAttribute("hidden")
+                b3.removeAttribute("hidden")
+                b4.removeAttribute("hidden")
+                b5.removeAttribute("hidden")
+                b6.removeAttribute("hidden")
+                b7.removeAttribute("hidden")
+                b1.style.position ="absolute";
+                b2.style.position ="absolute";
+                b3.style.position ="absolute";
+                b4.style.position ="absolute";
+                b5.style.position ="absolute";
+                b6.style.position ="absolute";
+                b7.style.position ="absolute";
+                var topPos ="29%";
+                b1.style.top=topPos;
+                b2.style.top=topPos;
+                b3.style.top=topPos;
+                b4.style.top=topPos;
+                b5.style.top=topPos;
+                b6.style.top=topPos;
+                b7.style.top=topPos;
+                b1.style.left = "2%";
+                b2.style.left = "6%";
+                b3.style.left = "34%";
+                b4.style.left = "39%";
+                b5.style.left = "44%";
+                b6.style.left = "50%";
+                b7.style.left = "56%";
+
+                var tabling1 = document.getElementById("datTable1");
+                tabling1.removeAttribute("hidden");
+                tabling1.style.position ="absolute";
+                tabling1.style.right="20%";
+                tabling1.style.top = "35%";
+
+                var tabling2 = document.getElementById("datTable2");
+                tabling2.removeAttribute("hidden");
+                tabling2.style.position ="absolute";
+                tabling2.style.right="1%";
+                tabling2.style.top = "35%";
+
                 const data = await response.json();
-                financeDataDisplay.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                modCharts(data[0]);
+                console.log(data[0]);
+                createChart(ticker, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19], data[20])
+                //financeDataDisplay.innerHTML = '<pre>' + JSON.stringify(data[1], null, 2) + '</pre>';
             } else {
                 const error = await response.json();
                 financeDataDisplay.textContent = `Error: ${error.error}`;
             }
+        }
+
+        function modCharts(info){
+            document.getElementById("T1row1V1").innerHTML = "Trailing PE";
+            document.getElementById("T1row1V2").innerHTML = info["TrailingPE"].toFixed(2);
+
+            document.getElementById("T1row2V1").innerHTML = "Forward PE";
+            document.getElementById("T1row2V2").innerHTML = info["ForwardPE"].toFixed(2);
+
+            document.getElementById("T1row3V1").innerHTML = "Trailing EPS";
+            document.getElementById("T1row3V2").innerHTML = info["TrailingEPS"].toFixed(2);
+
+            document.getElementById("T1row4V1").innerHTML = "Forward EPS";
+            document.getElementById("T1row4V2").innerHTML = info["ForwardEPS"].toFixed(2);
+
+            document.getElementById("T1row5V1").innerHTML = "Average Volume";
+            document.getElementById("T1row5V2").innerHTML = info["AvgVolume"];
+
+            document.getElementById("T1row6V1").innerHTML = "Volume";
+            document.getElementById("T1row6V2").innerHTML = info["Volume"];
+
+            document.getElementById("T1row7V1").innerHTML = "Bid";
+            document.getElementById("T1row7V2").innerHTML = info["Bid"].toFixed(2);
+
+            document.getElementById("T1row8V1").innerHTML = "Ask";
+            document.getElementById("T1row8V2").innerHTML = info["Ask"].toFixed(2);
+
+            document.getElementById("T1row9V1").innerHTML = "Open";
+            document.getElementById("T1row9V2").innerHTML = info["Open"].toFixed(2);
+
+            document.getElementById("T1row10V1").innerHTML = "FLOAT";
+            EBITDA = info["EBITDA"];
+            if(EBITDA>1000000000000){
+                EBITDA= EBITDA/1000000000000.0;
+                EBITDA = EBITDA.toFixed(2)+" T";
+            }
+            else if(EBITDA>1000000000){
+                EBITDA= EBITDA/1000000000.0;
+                EBITDA = EBITDA.toFixed(2)+" B";
+            }else if(EBITDA>1000000){
+                EBITDA = EBITDA/1000000.0;
+                EBITDA = EBITDA.toFixed(2)+" M";
+            }
+            else if(EBITDA>1000){
+                EBITDA = EBITDA/1000.0;
+                EBITDA = EBITDA.toFixed(2)+" K";
+            }
+            document.getElementById("T1row10V2").innerHTML = EBITDA;
+
+
+            document.getElementById("T1row11V1").innerHTML = "Float";
+            FLOAT = info["Float"];
+            if(FLOAT>1000000000000){
+                FLOAT= FLOAT/1000000000000.0;
+                FLOAT = FLOAT.toFixed(2)+" T";
+            }
+            else if(FLOAT>1000000000){
+                FLOAT= FLOAT/1000000000.0;
+                FLOAT = FLOAT.toFixed(2)+" B";
+            }else if(FLOAT>1000000){
+                FLOAT = FLOAT/1000000.0;
+                FLOAT = FLOAT.toFixed(2)+" M";
+            }
+            else if(FLOAT>1000){
+                FLOAT = FLOAT/1000.0;
+                FLOAT = FLOAT.toFixed(2)+" K";
+            }
+            document.getElementById("T1row11V2").innerHTML = FLOAT;
+
+            document.getElementById("T1row12V1").innerHTML = "Shares Short";
+            SHARES = info["SharesShort"];
+            if(SHARES>1000000000000){
+                SHARES= SHARES/1000000000000.0;
+                SHARES = SHARES.toFixed(2)+" T";
+            }
+            else if(SHARES>1000000000){
+                SHARES= SHARES/1000000000.0;
+                SHARES = SHARES.toFixed(2)+" B";
+            }else if(SHARES>1000000){
+                SHARES = SHARES/1000000.0;
+                SHARES = SHARES.toFixed(2)+" M";
+            }
+            else if(SHARES>1000){
+                SHARES = SHARES/1000.0;
+                SHARES = SHARES.toFixed(2)+" K";
+            }
+            document.getElementById("T1row12V2").innerHTML = SHARES;
+
+            document.getElementById("T1row13V1").innerHTML = "Short Ratio";
+            document.getElementById("T1row13V2").innerHTML = info["ShortRatio"].toFixed(2);
+
+
+
+            document.getElementById("T2row1V1").innerHTML = "Short % of Float";
+            document.getElementById("T2row1V2").innerHTML = (info["ShortPercOfFloat"]*100.0).toFixed(2)+"%";
+
+            document.getElementById("T2row2V1").innerHTML = "Revenue";
+            REVENUE = info["Revenue"];
+            if(REVENUE>1000000000000){
+                REVENUE= REVENUE/1000000000000.0;
+                REVENUE = REVENUE.toFixed(2)+" T";
+            }
+            else if(REVENUE>1000000000){
+                REVENUE= REVENUE/1000000000.0;
+                REVENUE = REVENUE.toFixed(2)+" B";
+            }else if(REVENUE>1000000){
+                REVENUE = REVENUE/1000000.0;
+                REVENUE = REVENUE.toFixed(2)+" M";
+            }
+            else if(REVENUE>1000){
+                REVENUE = REVENUE/1000.0;
+                REVENUE = REVENUE.toFixed(2)+" K";
+            }
+            document.getElementById("T2row2V2").innerHTML = REVENUE;
+
+            document.getElementById("T2row3V1").innerHTML = "Net Income";
+            INCOME = info["NetIncome"];
+            if(INCOME>1000000000000){
+                INCOME= INCOME/1000000000000.0;
+                INCOME = INCOME.toFixed(2)+" T";
+            }
+            else if(INCOME>1000000000){
+                INCOME= INCOME/1000000000.0;
+                INCOME = INCOME.toFixed(2)+" B";
+            }else if(INCOME>1000000){
+                INCOME = INCOME/1000000.0;
+                INCOME = INCOME.toFixed(2)+" M";
+            }
+            else if(INCOME>1000){
+                INCOME = INCOME/1000.0;
+                INCOME = INCOME.toFixed(2)+" K";
+            }
+            document.getElementById("T2row3V2").innerHTML = INCOME;
+
+            document.getElementById("T2row4V1").innerHTML = "Profit Margin";
+            document.getElementById("T2row4V2").innerHTML = (info["ProfitMargin"]*100.0).toFixed(2)+"%";
+
+            document.getElementById("T2row5V1").innerHTML = "Last Fiscal Year";
+            FISCALEND = info["LastFiscalYearEnd"];
+            if(FISCALEND>1000000000000){
+                FISCALEND= FISCALEND/1000000000000.0;
+                FISCALEND = FISCALEND.toFixed(2)+" T";
+            }
+            else if(FISCALEND>1000000000){
+                FISCALEND= FISCALEND/1000000000.0;
+                FISCALEND = FISCALEND.toFixed(2)+" B";
+            }else if(FISCALEND>1000000){
+                FISCALEND = FISCALEND/1000000.0;
+                FISCALEND = FISCALEND.toFixed(2)+" M";
+            }
+            else if(FISCALEND>1000){
+                FISCALEND = FISCALEND/1000.0;
+                FISCALEND = FISCALEND.toFixed(2)+" K";
+            }
+            document.getElementById("T2row5V2").innerHTML = FISCALEND;
+
+            document.getElementById("T2row6V1").innerHTML = "Next Fiscal Year";
+            NEXTFISCALEND = info["NextFiscalYearEnd"];
+            if(NEXTFISCALEND>1000000000000){
+                NEXTFISCALEND= NEXTFISCALEND/1000000000000.0;
+                NEXTFISCALEND = NEXTFISCALEND.toFixed(2)+" T";
+            }
+            else if(NEXTFISCALEND>1000000000){
+                NEXTFISCALEND= NEXTFISCALEND/1000000000.0;
+                NEXTFISCALEND = NEXTFISCALEND.toFixed(2)+" B";
+            }else if(NEXTFISCALEND>1000000){
+                NEXTFISCALEND = NEXTFISCALEND/1000000.0;
+                NEXTFISCALEND = NEXTFISCALEND.toFixed(2)+" M";
+            }
+            else if(NEXTFISCALEND>1000){
+                NEXTFISCALEND = NEXTFISCALEND/1000.0;
+                NEXTFISCALEND = NEXTFISCALEND.toFixed(2)+" K";
+            }
+            document.getElementById("T2row6V2").innerHTML = NEXTFISCALEND;
+
+            document.getElementById("T2row7V1").innerHTML = "Market Cap";
+            CAP = info["MarketCap"];
+            if(CAP>1000000000000){
+                CAP= CAP/1000000000000.0;
+                CAP = CAP.toFixed(2)+" T";
+            }
+            else if(CAP>1000000000){
+                CAP= CAP/1000000000.0;
+                CAP = CAP.toFixed(2)+" B";
+            }else if(CAP>1000000){
+                CAP = CAP/1000000.0;
+                CAP = CAP.toFixed(2)+" M";
+            }
+            else if(CAP>1000){
+                CAP = CAP/1000.0;
+                CAP = CAP.toFixed(2)+" K";
+            }
+            document.getElementById("T2row7V2").innerHTML = CAP;
+
+            document.getElementById("T2row8V1").innerHTML = "52 Week Low";
+            document.getElementById("T2row8V2").innerHTML = info["52WeekLow"].toFixed(2);
+
+            document.getElementById("T2row9V1").innerHTML = "52 Week High";
+            document.getElementById("T2row9V2").innerHTML = info["52WeekHigh"].toFixed(2);
+
+            document.getElementById("T2row10V1").innerHTML = "52 Week Change";
+            document.getElementById("T2row10V2").innerHTML = info["52WeekChange"].toFixed(2);
+
+            document.getElementById("T2row11V1").innerHTML = "Day Low";
+            document.getElementById("T2row11V2").innerHTML = info["DayLow"].toFixed(2);
+
+            document.getElementById("T2row12V1").innerHTML = "Day High";
+            document.getElementById("T2row12V2").innerHTML = info["DayHigh"].toFixed(2);
+
+        }
+
+        function createChart(symbol, W1_open, W1_low, W1_high, W1_closing, M1_open, M1_low, M1_high, M1_closing, M3_open, M3_low, M3_high, M3_closing, M6_open, M6_low, M6_high, M6_closing, Y1_open, Y1_low, Y1_high, Y1_closing){
+            //W1 chart
+            var title  = symbol;
+            var dat1;
+            var dat2;
+            var dat3;
+            var dat4;
+            var xAxis="";
+            var format="";
+            var graphs=false;
+
+            if(TChoice == 1){
+                dat1 =W1_open;
+                dat2 =W1_low;
+                dat3=W1_high;
+                dat4 =W1_closing;
+                title = title+" for 1 Week";
+                xAxis = "day";
+                format = "DD-MMM-YY";
+            }else if(TChoice ==2){
+                dat1 =M1_open;
+                dat2 =M1_low;
+                dat3=M1_high;
+                dat4 =M1_closing;
+                title = title+" for 1 Month";
+                xAxis = "week";
+                format = "MMM-YY";
+            }else if(TChoice ==3){
+                dat1 =M3_open;
+                dat2 =M3_low;
+                dat3=M3_high;
+                dat4 =M3_closing;
+                title = title+" for 3 Months";
+                xAxis = "week";
+                format = "MMM-YY";
+            }else if(TChoice ==4){
+                dat1 =M6_open;
+                dat2 =M6_low;
+                dat3=M6_high;
+                dat4 =M6_closing;
+                title = title+" for 6 Months";
+                xAxis = "week";
+                format = "MMM-YY";
+            }else if(TChoice ==5){
+                dat1 =Y1_open;
+                dat2 =Y1_low;
+                dat3=Y1_high;
+                dat4 =Y1_closing;
+                title = title +" for 1 Year";
+                xAxis = "month";
+                format = "MMM";
+            }
+
+            key = Object.keys(dat1);
+            var len =  key.length;
+            let DatPonC = [];
+            let DatPonL = [];
+            for(let i =0;i<len;i++){
+                var temp = {x: new Date(key[i]), y:[dat1[key[i]], dat2[key[i]],dat3[key[i]],dat4[key[i]]]};
+                DatPonC.push(temp);
+            }
+            //console.log(DatPonC);
+            for(let i =0;i<len;i++){
+                var temp = {x: new Date(key[i]), y:dat4[key[i]]};
+                DatPonL.push(temp);
+            }
+           // console.log(DatPonL);
+
+            if(GChoice==1){
+                generateChart(title, DatPonL, xAxis, "1", format, false);
+            }else if (GChoice==2){
+                generateChart(title, DatPonC, xAxis, "1", format, true);
+            }
+           
+            
+           
+            //M1 chart
+            //M3 chart
+            //M6 chart
+            //Y1 chart
+        }
+
+        function generateChart(title, datPon, interType, inter, formatting, charting){
+            //true for line will result in candle chart, false will result in line chart
+            font = "tahoma";
+
+            if(charting){   
+                var chart = new CanvasJS.Chart("chartContainer",
+                {
+                    backgroundColor: "#000000",
+                    title:{
+                        fontColor: "white",
+                        text: title,
+                        fontFamily: font
+                    },
+                    zoomEnabled: true, 
+                    exportEnabled: false,
+                    axisY: {
+                        includeZero:false,
+                        title: "Prices",
+                        prefix: "$ ",
+                        tickColor: "white",
+                        gridColor:"#4F4F4F",
+                        lineColor:"white",
+                        titleFontColor: "white",
+                        labelFontColor: "white",
+                        crosshair: { 
+                            enabled: true,
+                            color:"#4F4F4F"
+                        } 
+                    },
+                    axisX: {
+                        labelFontColor: "white",
+                        interval:inter,
+                        intervalType: interType,
+                        valueFormatString: formatting,
+                        labelAngle: -45,
+                        tickColor:"white",
+                        lineColor:"white",
+                        crosshair: { 
+                            enabled: true,
+                            color:"#4F4F4F"
+                        } 
+                    },
+                    data: [
+                    {
+                        type: "candlestick",
+                        color: "white",
+                        risingColor: "green",
+                        fallingColor:"red",
+                        dataPoints: datPon
+                    }
+                    ]
+                });
+                chart.render();
+            }else{
+                var chart = new CanvasJS.Chart("chartContainer",
+                {
+                   
+                    backgroundColor: "#000000",
+                    title:{
+                        fontColor: "white",
+                        text: title,
+                        fontFamily: font
+                    },
+                    zoomEnabled: true,
+                    exportEnabled: false,
+                    axisY: {
+                        
+                        includeZero:false,
+                        title: "Prices",
+                        prefix: "$ ",
+                        tickColor: "white",
+                        gridColor:"#4F4F4F",
+                        lineColor:"white",
+                        titleFontColor: "white",
+                        labelFontColor: "white",
+                        crosshair: { 
+                            enabled: true,
+                            color:"#4F4F4F"
+                        } 
+                    },
+                    axisX: {
+                        labelFontColor: "white",
+                        labelAngle: -45,
+                        tickColor:"white",
+                        lineColor:"white",
+                        crosshair: { 
+                            enabled: true,
+                            color:"#4F4F4F"
+                        } 
+                    },
+                    data: [
+                    {
+                        type: "line",
+                        dataPoints: datPon
+                    }
+                    ]
+                });
+                chart.render();
+            }
+            
         }
     </script>
 </body>

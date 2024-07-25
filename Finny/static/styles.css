@@ -84,6 +84,16 @@ button:hover, .button:hover {
     background-color: #005f99;
 }
 
+.butt {
+    background-color: #000000;
+    color: #FFFFFF;
+    padding: 10px;
+}
+
+.butt:hover{
+    background-color: #4F4F4F;
+}
+
 .hidden {
     display: none;
 }
@@ -179,3 +189,17 @@ body.ai-report-page .layout {
     border-radius: 10px;
     white-space: pre-wrap; /* Wrap text within the pre tag */
 }
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 18%;
+    
+    
+  }
+  
+  td, th {
+    border: 1px solid #a09d9d;
+    text-align: left;
+    padding: 8px;
+  }
