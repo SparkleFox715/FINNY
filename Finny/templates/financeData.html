@@ -27,7 +27,7 @@
         <button hidden class = "butt" id="Year1" onclick="fetchFinanceData(-1, 5)">1 Year</button>
 
 
-        <div id="chartContainer" style="height: 65%; width: 60%; position:absolute;"></div>
+        <div hidden id="chartContainer" style="height: 65%; width: 60%; position:absolute;"></div>
 
         <table hidden id="datTable1">
             <tr>
@@ -211,6 +211,9 @@
                 tabling2.style.position ="absolute";
                 tabling2.style.right="1%";
                 tabling2.style.top = "35%";
+
+                var chartss =document.getElementById("chartContainer");
+                chartss.removeAttribute("hidden");
 
                 const data = await response.json();
                 modCharts(data[0]);

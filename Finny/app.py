@@ -173,7 +173,10 @@ def fetch_yahoo_data(symbol):
         'NextFiscalYearEnd': generalInfo.info.get('nextFiscalYearEnd', 'N/A'),
         'MarketCap': generalInfo.info.get('marketCap', 'N/A'),
         '52WeekLow': generalInfo.info.get('fiftyTwoWeekLow', 'N/A'),
-        '52WeekHigh': generalInfo.info.get('fiftyTwoWeekHigh', 'N/A')
+        '52WeekHigh': generalInfo.info.get('fiftyTwoWeekHigh', 'N/A'),
+        '52WeekChange': generalInfo.info.get('52WeekChange', 'N/A'),
+        'DayLow': generalInfo.info.get('dayLow', 'N/A'),
+        'DayHigh': generalInfo.info.get('dayHigh', 'N/A')
     }
     #going to  include stock information for 1 week, 1 month, 3 months, 6 months, and 1 year
     W1_data  =  yahFin.download(symbol,  period='5d')
