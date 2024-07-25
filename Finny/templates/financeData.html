@@ -27,8 +27,24 @@
         <button hidden class = "butt" id="Year1" onclick="fetchFinanceData(-1, 5)">1 Year</button>
 
 
-        <div id="chartContainer" style="height: 65%; width: 60%; position:absolute;">
-    </div>
+        <div id="chartContainer" style="height: 65%; width: 60%; position:absolute;"></div>
+
+        <table hidden id="datTable">
+            <tr>
+                <td id = "T1row1V1">a</td>
+                <td id = "T1row1V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row2V1">a</td>
+                <td id = "T1row2V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row3V1">a</td>
+                <td id = "T1row3V2">b</td>
+            </tr>
+        </table>
+              
+    
 
     <script>
         var GChoice = 1;
@@ -93,6 +109,11 @@
                 b5.style.left = "44%";
                 b6.style.left = "50%";
                 b7.style.left = "56%";
+
+                var tabling = document.getElementById("datTable");
+                tabling.removeAttribute("hidden");
+                tabling.style.position ="absolute";
+                tabling.style.right="2%";
 
                 const data = await response.json();
                 createChart(ticker, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19], data[20])
