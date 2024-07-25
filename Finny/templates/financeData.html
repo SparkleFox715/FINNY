@@ -7,16 +7,16 @@
     <title>Financial Data</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body>
+<body class="finance-data">
     <div class="container">
         <div id ="headings">
             <h1 class="bubbly">Financial Data</h1>
             <p>Enter a stock ticker to view financial data:</p>
             <input type="text" id="ticker" placeholder="Enter stock ticker">
             <button onclick="fetchFinanceData(1, 1)">Get Finance Data</button>
+            <button onclick="window.location.href='/'">Home</button>
         </div>
 
-        <div id="financeDataDisplay" class="dataSection"></div>
 
         <button hidden class = "butt" id="lineGraph" onclick="fetchFinanceData(1, -1)">Line</button>
         <button hidden class = "butt" id="candleGraph" onclick="fetchFinanceData(2, -1)">Candle</button>

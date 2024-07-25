@@ -1,23 +1,33 @@
+/* Default styles for all pages */
 body {
-    background-color: #1e1e1e; /* VS Code dark background */
-    color: #d4d4d4; /* VS Code text color */
+    background-color: #1e1e1e;
+    color: #d4d4d4;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
+    display: flex;
+    justify-content: center; /* Center all pages by default */
+    align-items: flex-start;
+    height: 100vh;
+    overflow: auto;
 }
 
 .container {
-    text-align: center;
+    max-width: 1200px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center contents within the container */
 }
 
 .bubbly {
-    font-size: 2.5em;
-    color: #007acc; /* VS Code blue */
+    font-size: 2em;
+    color: #007acc;
     text-shadow: 2px 2px #666, 4px 4px #999;
     animation: bubble 1s infinite;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 @keyframes bubble {
@@ -29,7 +39,34 @@ body {
     }
 }
 
-button {
+.layout {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center elements in layout */
+    width: 100%;
+}
+
+.switches {
+    flex: 1;
+    min-width: 250px;
+    margin-right: 20px;
+}
+
+.switches-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+button, .button {
     background-color: #007acc;
     color: #ffffff;
     border: none;
@@ -38,10 +75,12 @@ button {
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-    margin: 10px;
+    margin: 10px 0;
+    text-align: center;
+    text-decoration: none;
 }
 
-button:hover {
+button:hover, .button:hover {
     background-color: #005f99;
 }
 
@@ -66,7 +105,14 @@ button:hover {
 }
 
 .dataSection {
+    flex: 2;
     margin-top: 20px;
+    overflow-x: auto;
+    width: 100%; /* Ensure full width for content */
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
 }
 
 input[type="text"] {
@@ -74,7 +120,7 @@ input[type="text"] {
     font-size: 1em;
     border: 1px solid #007acc;
     border-radius: 5px;
-    margin: 10px;
+    margin: 10px 0;
 }
 
 .filing {
@@ -82,58 +128,66 @@ input[type="text"] {
     border-radius: 5px;
     padding: 10px;
     margin: 10px 0;
-}
-
-.filing p {
-    margin: 5px 0;
-}
-
-.filing a {
-    color: #007acc;
-    text-decoration: none;
-}
-
-.filing a:hover {
-    text-decoration: underline;
-}
-
-/* Popup styles */
-.popup {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
-    justify-content: center;
-    align-items: center;
-}
-
-.popup-content {
-    background-color: #1e1e1e;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #007acc;
-    width: 80%;
     color: #d4d4d4;
 }
 
-.close-button {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+.filing .file-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
-.close-button:hover,
-.close-button:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+.filing .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Specific styles for the AI report page */
+body.ai-report-page {
+    justify-content: flex-start;
+}
+
+body.ai-report-page .container {
+    max-width: none; /* Make container full width */
+    width: 100%;
+}
+
+body.ai-report-page .layout {
+    justify-content: flex-start; /* Left align content */
+}
+
+/* Centering the search bar and buttons on the SEC Data page */
+.sec-data .dataSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.sec-data .dataSection input[type="text"], .sec-data .dataSection button {
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Centering the results on the Finance Data page */
+.finance-data #financeDataDisplay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.finance-data #financeDataDisplay pre {
+    max-width: 800px;
+    width: 100%;
+    background-color: #2e2e2e;
+    padding: 20px;
+    border-radius: 10px;
+    white-space: pre-wrap; /* Wrap text within the pre tag */
 }
 
 table {
