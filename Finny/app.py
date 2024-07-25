@@ -1,15 +1,15 @@
-from flask import Flask, render_template, request, jsonify
+import os
+import json
+import time
 import requests
 import yfinance as yahFin
-import time
-import json
-import os
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
 SEC_API_URL = "https://data.sec.gov"
 SEC_EMAIL = "pyz4577@gmail.com"
-LOCAL_TICKERS_FILE = os.path.join('data', 'company_tickers.json')  # Ensure this file exists locally
+LOCAL_TICKERS_FILE = os.path.join('data', 'company_tickers.json')
 
 def load_company_tickers():
     try:
@@ -23,7 +23,6 @@ def load_company_tickers():
 def fetch_data_with_retries(url, headers, retries=3, delay=2):
     session = requests.Session()
     session.headers.update(headers)
-    
     for attempt in range(retries):
         try:
             print(f"Fetching data from URL: {url}")
@@ -65,30 +64,25 @@ def fetch_sec_data():
         'Connection': 'keep-alive'
     }
 
-    # Attempt to fetch CIK lookup from SEC website
     cik_lookup_url = "https://www.sec.gov/files/company_tickers.json"
     print(f"CIK Lookup URL: {cik_lookup_url}")
     cik_lookup_response = fetch_data_with_retries(cik_lookup_url, headers)
     
-    # Fallback to local file if fetching fails
     if cik_lookup_response is None:
         print(f"Fetching from local file: {LOCAL_TICKERS_FILE}")
         cik_lookup_response = load_company_tickers()
         if cik_lookup_response is None:
             return jsonify({'error': 'Failed to fetch CIK lookup data and local file not found.'}), 500
 
-    # Debugging output to inspect the response content
     print(f"CIK lookup response type: {type(cik_lookup_response)}")
     print(f"CIK lookup response content: {cik_lookup_response}")
 
-    # Ensure the response is parsed as JSON
     if isinstance(cik_lookup_response, str):
         try:
             cik_lookup_response = json.loads(cik_lookup_response)
         except json.JSONDecodeError:
             return jsonify({'error': 'Failed to parse CIK lookup response as JSON.'}), 500
 
-    # Process the CIK lookup data
     ticker_to_cik = {v['ticker']: v['cik_str'] for v in cik_lookup_response.values()}
     cik = ticker_to_cik.get(ticker)
     if cik is None:
@@ -96,7 +90,7 @@ def fetch_sec_data():
 
     print(f"Found CIK for {ticker}: {cik}")
 
-    edgar_url = f'https://data.sec.gov/submissions/CIK{str(cik).zfill(10)}.json'  # Ensure CIK is zero-padded to 10 digits
+    edgar_url = f'https://data.sec.gov/submissions/CIK{str(cik).zfill(10)}.json'
     print(f"EDGAR URL: {edgar_url}")
     response = fetch_data_with_retries(edgar_url, headers)
     if response is None:
@@ -171,6 +165,18 @@ def fetch_yahoo_data(symbol):
         '52WeekHigh': generalInfo.info.get('fiftyTwoWeekHigh', 'N/A')
     }
     return info
+
+@app.route('/ai-report')
+def ai_report():
+    return render_template('aiReport.html')
+
+@app.route('/generate-ai-report', methods=['POST'])
+def generate_ai_report():
+    selected_options = request.json
+    ticker = "AAPL"  # Example: Replace with actual logic to get ticker
+    data = fetch_yahoo_data(ticker)
+    report_data = {key: value for key, value in data.items() if selected_options.get(key.lower(), False)}
+    return jsonify(report_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
