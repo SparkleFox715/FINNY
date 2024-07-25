@@ -45,6 +45,16 @@ button:hover {
     background-color: #005f99;
 }
 
+.butt {
+    background-color: #000000;
+    color: #FFFFFF;
+    padding: 10px;
+}
+
+.butt:hover{
+    background-color: #4F4F4F;
+}
+
 .hidden {
     display: none;
 }
