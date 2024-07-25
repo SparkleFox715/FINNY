@@ -139,11 +139,13 @@ input[type="text"] {
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    width: 25%;
+    width: 18%;
+    
+    
   }
   
   td, th {
-    border: 1px solid #dddddd;
+    border: 1px solid #a09d9d;
     text-align: left;
     padding: 8px;
   }

@@ -29,7 +29,7 @@
 
         <div id="chartContainer" style="height: 65%; width: 60%; position:absolute;"></div>
 
-        <table hidden id="datTable">
+        <table hidden id="datTable1">
             <tr>
                 <td id = "T1row1V1">a</td>
                 <td id = "T1row1V2">b</td>
@@ -42,8 +42,98 @@
                 <td id = "T1row3V1">a</td>
                 <td id = "T1row3V2">b</td>
             </tr>
+            <tr>
+                <td id = "T1row4V1">a</td>
+                <td id = "T1row4V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row5V1">a</td>
+                <td id = "T1row5V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row6V1">a</td>
+                <td id = "T1row6V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row7V1">a</td>
+                <td id = "T1row7V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row8V1">a</td>
+                <td id = "T1row8V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row9V1">a</td>
+                <td id = "T1row9V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row10V1">a</td>
+                <td id = "T1row10V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row11V1">a</td>
+                <td id = "T1row11V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row12V1">a</td>
+                <td id = "T1row12V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T1row13V1">a</td>
+                <td id = "T1row13V2">b</td>
+            </tr>
         </table>
-              
+        
+        <table hidden id="datTable2">
+            <tr>
+                <td id = "T2row1V1">a</td>
+                <td id = "T2row1V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row2V1">a</td>
+                <td id = "T2row2V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row3V1">a</td>
+                <td id = "T2row3V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row4V1">a</td>
+                <td id = "T2row4V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row5V1">a</td>
+                <td id = "T2row5V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row6V1">a</td>
+                <td id = "T2row6V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row7V1">a</td>
+                <td id = "T2row7V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row8V1">a</td>
+                <td id = "T2row8V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row9V1">a</td>
+                <td id = "T2row9V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row10V1">a</td>
+                <td id = "T2row10V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row11V1">a</td>
+                <td id = "T2row11V2">b</td>
+            </tr>
+            <tr>
+                <td id = "T2row12V1">a</td>
+                <td id = "T2row12V2">b</td>
+            </tr>
+        </table>
     
 
     <script>
@@ -110,12 +200,21 @@
                 b6.style.left = "50%";
                 b7.style.left = "56%";
 
-                var tabling = document.getElementById("datTable");
-                tabling.removeAttribute("hidden");
-                tabling.style.position ="absolute";
-                tabling.style.right="2%";
+                var tabling1 = document.getElementById("datTable1");
+                tabling1.removeAttribute("hidden");
+                tabling1.style.position ="absolute";
+                tabling1.style.right="20%";
+                tabling1.style.top = "35%";
+
+                var tabling2 = document.getElementById("datTable2");
+                tabling2.removeAttribute("hidden");
+                tabling2.style.position ="absolute";
+                tabling2.style.right="1%";
+                tabling2.style.top = "35%";
 
                 const data = await response.json();
+                modCharts(data[0]);
+                console.log(data[0]);
                 createChart(ticker, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19], data[20])
                 //financeDataDisplay.innerHTML = '<pre>' + JSON.stringify(data[1], null, 2) + '</pre>';
             } else {
@@ -123,6 +222,216 @@
                 financeDataDisplay.textContent = `Error: ${error.error}`;
             }
         }
+
+        function modCharts(info){
+            document.getElementById("T1row1V1").innerHTML = "Trailing PE";
+            document.getElementById("T1row1V2").innerHTML = info["TrailingPE"].toFixed(2);
+
+            document.getElementById("T1row2V1").innerHTML = "Forward PE";
+            document.getElementById("T1row2V2").innerHTML = info["ForwardPE"].toFixed(2);
+
+            document.getElementById("T1row3V1").innerHTML = "Trailing EPS";
+            document.getElementById("T1row3V2").innerHTML = info["TrailingEPS"].toFixed(2);
+
+            document.getElementById("T1row4V1").innerHTML = "Forward EPS";
+            document.getElementById("T1row4V2").innerHTML = info["ForwardEPS"].toFixed(2);
+
+            document.getElementById("T1row5V1").innerHTML = "Average Volume";
+            document.getElementById("T1row5V2").innerHTML = info["AvgVolume"];
+
+            document.getElementById("T1row6V1").innerHTML = "Volume";
+            document.getElementById("T1row6V2").innerHTML = info["Volume"];
+
+            document.getElementById("T1row7V1").innerHTML = "Bid";
+            document.getElementById("T1row7V2").innerHTML = info["Bid"].toFixed(2);
+
+            document.getElementById("T1row8V1").innerHTML = "Ask";
+            document.getElementById("T1row8V2").innerHTML = info["Ask"].toFixed(2);
+
+            document.getElementById("T1row9V1").innerHTML = "Open";
+            document.getElementById("T1row9V2").innerHTML = info["Open"].toFixed(2);
+
+            document.getElementById("T1row10V1").innerHTML = "FLOAT";
+            EBITDA = info["EBITDA"];
+            if(EBITDA>1000000000000){
+                EBITDA= EBITDA/1000000000000.0;
+                EBITDA = EBITDA.toFixed(2)+" T";
+            }
+            else if(EBITDA>1000000000){
+                EBITDA= EBITDA/1000000000.0;
+                EBITDA = EBITDA.toFixed(2)+" B";
+            }else if(EBITDA>1000000){
+                EBITDA = EBITDA/1000000.0;
+                EBITDA = EBITDA.toFixed(2)+" M";
+            }
+            else if(EBITDA>1000){
+                EBITDA = EBITDA/1000.0;
+                EBITDA = EBITDA.toFixed(2)+" K";
+            }
+            document.getElementById("T1row10V2").innerHTML = EBITDA;
+
+
+            document.getElementById("T1row11V1").innerHTML = "Float";
+            FLOAT = info["Float"];
+            if(FLOAT>1000000000000){
+                FLOAT= FLOAT/1000000000000.0;
+                FLOAT = FLOAT.toFixed(2)+" T";
+            }
+            else if(FLOAT>1000000000){
+                FLOAT= FLOAT/1000000000.0;
+                FLOAT = FLOAT.toFixed(2)+" B";
+            }else if(FLOAT>1000000){
+                FLOAT = FLOAT/1000000.0;
+                FLOAT = FLOAT.toFixed(2)+" M";
+            }
+            else if(FLOAT>1000){
+                FLOAT = FLOAT/1000.0;
+                FLOAT = FLOAT.toFixed(2)+" K";
+            }
+            document.getElementById("T1row11V2").innerHTML = FLOAT;
+
+            document.getElementById("T1row12V1").innerHTML = "Shares Short";
+            SHARES = info["SharesShort"];
+            if(SHARES>1000000000000){
+                SHARES= SHARES/1000000000000.0;
+                SHARES = SHARES.toFixed(2)+" T";
+            }
+            else if(SHARES>1000000000){
+                SHARES= SHARES/1000000000.0;
+                SHARES = SHARES.toFixed(2)+" B";
+            }else if(SHARES>1000000){
+                SHARES = SHARES/1000000.0;
+                SHARES = SHARES.toFixed(2)+" M";
+            }
+            else if(SHARES>1000){
+                SHARES = SHARES/1000.0;
+                SHARES = SHARES.toFixed(2)+" K";
+            }
+            document.getElementById("T1row12V2").innerHTML = SHARES;
+
+            document.getElementById("T1row13V1").innerHTML = "Short Ratio";
+            document.getElementById("T1row13V2").innerHTML = info["ShortRatio"].toFixed(2);
+
+
+
+            document.getElementById("T2row1V1").innerHTML = "Short % of Float";
+            document.getElementById("T2row1V2").innerHTML = (info["ShortPercOfFloat"]*100.0).toFixed(2)+"%";
+
+            document.getElementById("T2row2V1").innerHTML = "Revenue";
+            REVENUE = info["Revenue"];
+            if(REVENUE>1000000000000){
+                REVENUE= REVENUE/1000000000000.0;
+                REVENUE = REVENUE.toFixed(2)+" T";
+            }
+            else if(REVENUE>1000000000){
+                REVENUE= REVENUE/1000000000.0;
+                REVENUE = REVENUE.toFixed(2)+" B";
+            }else if(REVENUE>1000000){
+                REVENUE = REVENUE/1000000.0;
+                REVENUE = REVENUE.toFixed(2)+" M";
+            }
+            else if(REVENUE>1000){
+                REVENUE = REVENUE/1000.0;
+                REVENUE = REVENUE.toFixed(2)+" K";
+            }
+            document.getElementById("T2row2V2").innerHTML = REVENUE;
+
+            document.getElementById("T2row3V1").innerHTML = "Net Income";
+            INCOME = info["NetIncome"];
+            if(INCOME>1000000000000){
+                INCOME= INCOME/1000000000000.0;
+                INCOME = INCOME.toFixed(2)+" T";
+            }
+            else if(INCOME>1000000000){
+                INCOME= INCOME/1000000000.0;
+                INCOME = INCOME.toFixed(2)+" B";
+            }else if(INCOME>1000000){
+                INCOME = INCOME/1000000.0;
+                INCOME = INCOME.toFixed(2)+" M";
+            }
+            else if(INCOME>1000){
+                INCOME = INCOME/1000.0;
+                INCOME = INCOME.toFixed(2)+" K";
+            }
+            document.getElementById("T2row3V2").innerHTML = INCOME;
+
+            document.getElementById("T2row4V1").innerHTML = "Profit Margin";
+            document.getElementById("T2row4V2").innerHTML = (info["ProfitMargin"]*100.0).toFixed(2)+"%";
+
+            document.getElementById("T2row5V1").innerHTML = "Last Fiscal Year";
+            FISCALEND = info["LastFiscalYearEnd"];
+            if(FISCALEND>1000000000000){
+                FISCALEND= FISCALEND/1000000000000.0;
+                FISCALEND = FISCALEND.toFixed(2)+" T";
+            }
+            else if(FISCALEND>1000000000){
+                FISCALEND= FISCALEND/1000000000.0;
+                FISCALEND = FISCALEND.toFixed(2)+" B";
+            }else if(FISCALEND>1000000){
+                FISCALEND = FISCALEND/1000000.0;
+                FISCALEND = FISCALEND.toFixed(2)+" M";
+            }
+            else if(FISCALEND>1000){
+                FISCALEND = FISCALEND/1000.0;
+                FISCALEND = FISCALEND.toFixed(2)+" K";
+            }
+            document.getElementById("T2row5V2").innerHTML = FISCALEND;
+
+            document.getElementById("T2row6V1").innerHTML = "Next Fiscal Year";
+            NEXTFISCALEND = info["NextFiscalYearEnd"];
+            if(NEXTFISCALEND>1000000000000){
+                NEXTFISCALEND= NEXTFISCALEND/1000000000000.0;
+                NEXTFISCALEND = NEXTFISCALEND.toFixed(2)+" T";
+            }
+            else if(NEXTFISCALEND>1000000000){
+                NEXTFISCALEND= NEXTFISCALEND/1000000000.0;
+                NEXTFISCALEND = NEXTFISCALEND.toFixed(2)+" B";
+            }else if(NEXTFISCALEND>1000000){
+                NEXTFISCALEND = NEXTFISCALEND/1000000.0;
+                NEXTFISCALEND = NEXTFISCALEND.toFixed(2)+" M";
+            }
+            else if(NEXTFISCALEND>1000){
+                NEXTFISCALEND = NEXTFISCALEND/1000.0;
+                NEXTFISCALEND = NEXTFISCALEND.toFixed(2)+" K";
+            }
+            document.getElementById("T2row6V2").innerHTML = NEXTFISCALEND;
+
+            document.getElementById("T2row7V1").innerHTML = "Market Cap";
+            CAP = info["MarketCap"];
+            if(CAP>1000000000000){
+                CAP= CAP/1000000000000.0;
+                CAP = CAP.toFixed(2)+" T";
+            }
+            else if(CAP>1000000000){
+                CAP= CAP/1000000000.0;
+                CAP = CAP.toFixed(2)+" B";
+            }else if(CAP>1000000){
+                CAP = CAP/1000000.0;
+                CAP = CAP.toFixed(2)+" M";
+            }
+            else if(CAP>1000){
+                CAP = CAP/1000.0;
+                CAP = CAP.toFixed(2)+" K";
+            }
+            document.getElementById("T2row7V2").innerHTML = CAP;
+
+            document.getElementById("T2row8V1").innerHTML = "52 Week Low";
+            document.getElementById("T2row8V2").innerHTML = info["52WeekLow"].toFixed(2);
+
+            document.getElementById("T2row9V1").innerHTML = "52 Week High";
+            document.getElementById("T2row9V2").innerHTML = info["52WeekHigh"].toFixed(2);
+
+            document.getElementById("T2row10V1").innerHTML = "52 Week Change";
+            document.getElementById("T2row10V2").innerHTML = info["52WeekChange"].toFixed(2);
+
+            document.getElementById("T2row11V1").innerHTML = "Day Low";
+            document.getElementById("T2row11V2").innerHTML = info["DayLow"].toFixed(2);
+
+            document.getElementById("T2row12V1").innerHTML = "Day High";
+            document.getElementById("T2row12V2").innerHTML = info["DayHigh"].toFixed(2);
+
+        }
+
         function createChart(symbol, W1_open, W1_low, W1_high, W1_closing, M1_open, M1_low, M1_high, M1_closing, M3_open, M3_low, M3_high, M3_closing, M6_open, M6_low, M6_high, M6_closing, Y1_open, Y1_low, Y1_high, Y1_closing){
             //W1 chart
             var title  = symbol;
@@ -184,12 +493,12 @@
                 var temp = {x: new Date(key[i]), y:[dat1[key[i]], dat2[key[i]],dat3[key[i]],dat4[key[i]]]};
                 DatPonC.push(temp);
             }
-            console.log(DatPonC);
+            //console.log(DatPonC);
             for(let i =0;i<len;i++){
                 var temp = {x: new Date(key[i]), y:dat4[key[i]]};
                 DatPonL.push(temp);
             }
-            console.log(DatPonL);
+           // console.log(DatPonL);
 
             if(GChoice==1){
                 generateChart(title, DatPonL, xAxis, "1", format, false);
