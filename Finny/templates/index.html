@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financial Analyst Finny</title>
-    <link rel="stylesheet" href="{{ url_for('Finny/static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
@@ -15,7 +15,7 @@
             <p>Choose the type of data you want to view:</p>
             <button onclick="navigateTo('/sec-data')">SEC Data</button>
             <button onclick="navigateTo('/finance-data')">Financial Data</button>
-            <button onclick="navigateTo('/ai-report-page')">AI Report</button>
+            <button onclick="navigateTo('/ai-report')">AI Report</button>
         </div>
     </div>
 
